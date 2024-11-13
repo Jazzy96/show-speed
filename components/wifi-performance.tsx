@@ -26,7 +26,7 @@ export function WifiPerformance() {
       <Card className="w-full max-w-4xl">
         <CardHeader>
           <CardTitle>WiFi性能分析</CardTitle>
-          <CardDescription>比较不同楼层的CPE和RN配置</CardDescription>
+          <CardDescription>比较不同楼层 CPE 和 RN 方案Wi-Fi速率</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="speeds" className="space-y-4">
@@ -39,19 +39,19 @@ export function WifiPerformance() {
               <ChartContainer
                 config={{
                   downloadClosed: {
-                    label: "下载速度 (关窗)",
+                    label: "下行速率 (关窗)",
                     color: "hsl(var(--chart-1))",
                   },
                   uploadClosed: {
-                    label: "上传速度 (关窗)",
+                    label: "上行速率 (关窗)",
                     color: "hsl(var(--chart-2))",
                   },
                   downloadOpen: {
-                    label: "下载速度 (开窗)",
+                    label: "下行速率 (开窗)",
                     color: "hsl(var(--chart-3))",
                   },
                   uploadOpen: {
-                    label: "上传速度 (开窗)",
+                    label: "上行速率 (开窗)",
                     color: "hsl(var(--chart-4))",
                   },
                 }}
@@ -60,13 +60,13 @@ export function WifiPerformance() {
                 <BarChart data={cpeData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="floor" label={{ value: '楼层', position: 'bottom' }} />
-                  <YAxis label={{ value: '速度 (Mbps)', angle: -90, position: 'insideLeft' }} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <YAxis label={{ value: '速率 (Mbps)', angle: -90, position: 'insideLeft' }} />
+                  <ChartTooltip content={<ChartTooltipContent title="速率" />} />
                   <Legend verticalAlign="top" height={36} />
-                  <Bar dataKey="downloadClosed" fill="var(--color-downloadClosed)" name="下载速度 (关窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="uploadClosed" fill="var(--color-uploadClosed)" name="上传速度 (关窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="downloadOpen" fill="var(--color-downloadOpen)" name="下载速度 (开窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="uploadOpen" fill="var(--color-uploadOpen)" name="上传速度 (开窗)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="downloadClosed" fill="var(--color-downloadClosed)" name="下行速率 (关窗)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="uploadClosed" fill="var(--color-uploadClosed)" name="上行速率 (关窗)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="downloadOpen" fill="var(--color-downloadOpen)" name="下行速率 (开窗)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="uploadOpen" fill="var(--color-uploadOpen)" name="上行速率 (开窗)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ChartContainer>
             </TabsContent>
