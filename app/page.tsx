@@ -1,5 +1,5 @@
-import { NetworkMetricsChart } from "@/components/network-metrics-chart"
+import { WifiPerformance } from "@/components/wifi-performance"
 
 export default function Page() {
-  return <NetworkMetricsChart />
+  return <WifiPerformance />
 }
