@@ -1,24 +1,24 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function WifiPerformance() {
-  // CPE测量数据
+  // 更新的CPE测量数据，楼层改为楼层落差
   const cpeData = [
-    { floor: 9, rssi: -74, downloadClosed: 50, uploadClosed: 34, downloadOpen: 39, uploadOpen: 37 },
-    { floor: 8, rssi: -80, downloadClosed: 24, uploadClosed: 8, downloadOpen: 36, uploadOpen: 17 },
-    { floor: 7, rssi: -82, downloadClosed: 14, uploadClosed: 3, downloadOpen: 0, uploadOpen: 0 },
-    { floor: 6, rssi: -81, downloadClosed: 8, uploadClosed: 0.5, downloadOpen: 1, uploadOpen: 0.4 },
-    { floor: 5, rssi: -79, downloadClosed: 7, uploadClosed: 1.9, downloadOpen: 0, uploadOpen: 0 },
-    { floor: 4, rssi: -75, downloadClosed: 8, uploadClosed: 0.5, downloadOpen: 0.5, uploadOpen: 0 },
+    { floorDiff: 1, rssi: -74, downloadClosed: 50, uploadClosed: 34, downloadOpen: 39, uploadOpen: 37 },
+    { floorDiff: 2, rssi: -80, downloadClosed: 24, uploadClosed: 8, downloadOpen: 36, uploadOpen: 17 },
+    { floorDiff: 3, rssi: -82, downloadClosed: 14, uploadClosed: 3, downloadOpen: 0, uploadOpen: 0 },
+    { floorDiff: 4, rssi: -81, downloadClosed: 8, uploadClosed: 0.5, downloadOpen: 1, uploadOpen: 0.4 },
+    { floorDiff: 5, rssi: -79, downloadClosed: 7, uploadClosed: 1.9, downloadOpen: 0, uploadOpen: 0 },
+    { floorDiff: 6, rssi: -75, downloadClosed: 8, uploadClosed: 0.5, downloadOpen: 0.5, uploadOpen: 0 },
   ]
 
-  // RN数据
+  // 更新的RN数据，楼层改为楼层落差
   const rnData = [
-    { floor: 9, rssi: -87, downloadOpen: 100, uploadOpen: 50 },
+    { floorDiff: 1, rssi: -87, downloadOpen: 100, uploadOpen: 50 },
   ]
 
   return (
@@ -26,12 +26,12 @@ export function WifiPerformance() {
       <Card className="w-full max-w-4xl">
         <CardHeader>
           <CardTitle>WiFi性能分析</CardTitle>
-          <CardDescription>比较不同楼层 CPE 和 RN 方案Wi-Fi速率</CardDescription>
+          <CardDescription>比较CPE方案不同楼层落差的WiFi速率</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="speeds" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="speeds">速度比较</TabsTrigger>
+              <TabsTrigger value="speeds">速率比较</TabsTrigger>
               <TabsTrigger value="rssi">RSSI值</TabsTrigger>
             </TabsList>
             
@@ -57,17 +57,21 @@ export function WifiPerformance() {
                 }}
                 className="h-[450px]"
               >
-                <BarChart data={cpeData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
+                <LineChart data={cpeData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="floor" label={{ value: '楼层', position: 'bottom' }} />
+                  <XAxis 
+                    dataKey="floorDiff" 
+                    label={{ value: '楼层落差', position: 'bottom' }} 
+                    tickFormatter={(value) => `${value}`}
+                  />
                   <YAxis label={{ value: '速率 (Mbps)', angle: -90, position: 'insideLeft' }} />
                   <ChartTooltip content={<ChartTooltipContent title="速率" />} />
                   <Legend verticalAlign="top" height={36} />
-                  <Bar dataKey="downloadClosed" fill="var(--color-downloadClosed)" name="下行速率 (关窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="uploadClosed" fill="var(--color-uploadClosed)" name="上行速率 (关窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="downloadOpen" fill="var(--color-downloadOpen)" name="下行速率 (开窗)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="uploadOpen" fill="var(--color-uploadOpen)" name="上行速率 (开窗)" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                  <Line type="monotone" dataKey="downloadClosed" stroke="var(--color-downloadClosed)" name="下行速率 (关窗)" dot={true} />
+                  <Line type="monotone" dataKey="uploadClosed" stroke="var(--color-uploadClosed)" name="上行速率 (关窗)" dot={true} />
+                  <Line type="monotone" dataKey="downloadOpen" stroke="var(--color-downloadOpen)" name="下行速率 (开窗)" strokeDasharray="5 5" dot={true} />
+                  <Line type="monotone" dataKey="uploadOpen" stroke="var(--color-uploadOpen)" name="上行速率 (开窗)" strokeDasharray="5 5" dot={true} />
+                </LineChart>
               </ChartContainer>
             </TabsContent>
 
@@ -87,9 +91,13 @@ export function WifiPerformance() {
               >
                 <LineChart data={[...cpeData, ...rnData]} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="floor" label={{ value: '楼层', position: 'bottom' }} />
+                  <XAxis 
+                    dataKey="floorDiff" 
+                    label={{ value: '楼层落差', position: 'bottom' }} 
+                    tickFormatter={(value) => `${value}`}
+                  />
                   <YAxis label={{ value: 'RSSI (dBm)', angle: -90, position: 'insideLeft' }} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <ChartTooltip content={<ChartTooltipContent title="RSSI" />} />
                   <Legend verticalAlign="top" height={36} />
                   <Line 
                     type="monotone" 
